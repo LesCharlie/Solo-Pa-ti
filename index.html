@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Ti, Mi Amor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff4f8;
+      --text-dark: #0f172a;
+      --text-muted: #475569;
+      --pink: #ff5fa2;
+      --button: #0b1220;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      padding: 80px 100px;
+      gap: 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      color: var(--text-muted);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      margin-bottom: 28px;
+    }
+
+    .badge span {
+      color: var(--pink);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .description {
+      max-width: 520px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--button);
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .link {
+      font-size: 15px;
+      color: var(--text-dark);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .heart-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    .heart {
+      width: 260px;
+      height: 260px;
+      background: linear-gradient(135deg, #ff6a88, #ff99ac);
+      position: relative;
+      transform: rotate(-45deg);
+      border-radius: 40px;
+      box-shadow: 0 30px 80px rgba(255, 105, 135, 0.35);
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      width: 260px;
+      height: 260px;
+      background: inherit;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -130px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 130px;
+      top: 0;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      .actions {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  
+    .player-section {
+      padding: 80px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .player-card {
+      background: white;
+      max-width: 820px;
+      width: 100%;
+      border-radius: 28px;
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.08);
+    }
+
+    .player-badge {
+      display: inline-block;
+      background: #ffe4ef;
+      color: var(--pink);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .player-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+
+    .waveform {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 30px;
+      height: 60px; /* altura fija para evitar que empuje otros elementos */
+    }
+
+    .waveform span {
+      width: 6px;
+      height: 24px;
+      background: linear-gradient(180deg, #ff6a88, #ff99ac);
+      border-radius: 4px;
+      animation: wave 1.2s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+
+    .waveform span:nth-child(odd) { animation-delay: .2s; }
+    .waveform span:nth-child(even) { animation-delay: .4s; }
+
+    @keyframes wave {
+  0%, 100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .bar {
+      flex: 1;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: var(--pink);
+    }
+
+    .time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #ff6a88, #ff99ac);
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(255,105,135,.4);
+      margin-bottom: 32px;
+    }
+
+    .lyrics {
+      background: #fff4f8;
+      padding: 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+  
+    .reasons-section {
+      padding: 100px 24px;
+      background: linear-gradient(180deg, #fff4f8, #ffffff);
+    }
+
+    .reasons-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 60px;
+    }
+
+    .reasons-badge {
+      display: inline-block;
+      background: #ffe4ef;
+      color: var(--pink);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .reasons-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      margin-bottom: 12px;
+    }
+
+    .reasons-header p {
+      color: var(--text-muted);
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .reason-card {
+      background: white;
+      padding: 32px 26px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .reason-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+    }
+
+    .reason-card h3 {
+      margin: 16px 0 10px;
+      font-size: 18px;
+    }
+
+    .reason-card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+  
+    .gallery-section {
+      padding: 100px 24px;
+      background: #fff4f8;
+    }
+
+    .gallery-header {
+      max-width: 700px;
+      margin-bottom: 60px;
+    }
+
+    .gallery-badge {
+      display: inline-block;
+      background: #ffe4ef;
+      color: var(--pink);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .gallery-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      margin-bottom: 12px;
+    }
+
+    .gallery-header p {
+      color: var(--text-muted);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      max-width: 1100px;
+      margin-top: 40px;
+    }
+
+    .gallery-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .gallery-info {
+      padding: 22px;
+    }
+
+    .gallery-info span {
+      font-size: 12px;
+      color: var(--pink);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .gallery-info h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .gallery-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+  
+    .hero-photo {
+      width: 320px;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 32px;
+      box-shadow: 0 30px 80px rgba(255,105,135,0.35);
+    }
+
+    /* Ancla para galería */
+    #galeria {
+      scroll-margin-top: 80px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div>
+      <div class="badge"><span>❤</span> Hecho con amor para ti</div>
+      <h1>Para Ti,<br>Mi Amor</h1>
+      <p class="description">
+        Creé esta canción pensando en ti, en nosotros, en todo lo que significas para mí.
+        Cada nota lleva un pedazo de mi corazón.
+      </p>
+      <div class="actions">
+        <button class="btn" onclick="document.getElementById('song').play()">▶ Escuchar Nuestra Canción</button>
+        <a href="#galeria" class="link">Ver Galería de Momentos →</a>
+      </div>
+    </div>
+
+    <div class="heart-wrapper">
+      <img src="foto-principal.jpg" alt="Nuestra foto" class="hero-photo">
+    </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: REPRODUCTOR DE CANCIÓN -->
+  <section class="player-section">
+    <div class="player-card">
+      <div class="player-badge">🎵 Nuestra Canción</div>
+      <h2>Una Canción Para Ti</h2>
+      <p class="subtitle">Compuesta especialmente para expresar lo que siento</p>
+
+      <div class="waveform" id="waveform">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="progress">
+        <span class="time">0:00</span>
+        <div class="bar"><div class="fill" id="progress"></div></div>
+        <span class="time" id="duration">0:00</span>
+      </div>
+
+      <button class="play-btn" id="playBtn">⏸</button>
+
+      <div class="lyrics">
+        <p>"Aquí puedes agregar la letra de tu canción..."</p>
+        <em>
+          Cada palabra escrita pensando en ti,<br>
+          cada melodía lleva tu nombre,<br>
+          eres la inspiración de mi vida...
+        </em>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: RAZONES POR LAS QUE TE AMO -->
+  <section class="reasons-section">
+    <div class="reasons-header">
+      <span class="reasons-badge">💞 Palabras del Corazón</span>
+      <h2>Razones Por Las Que<br>Te Amo</h2>
+      <p>Cada día descubro algo nuevo que me enamora de ti</p>
+    </div>
+
+    <div class="reasons-grid">
+      <div class="reason-card">💛<h3>Tu Sonrisa</h3><p>Tu sonrisa ilumina mis días más oscuros. Cada vez que te veo sonreír, mi corazón se llena de felicidad.</p></div>
+      <div class="reason-card">🎵<h3>Tu Risa</h3><p>Tu risa es la melodía más hermosa que he escuchado. Es mi sonido favorito en todo el mundo.</p></div>
+      <div class="reason-card">✨<h3>Tu Mirada</h3><p>Cuando me miras, siento que el tiempo se detiene. En tus ojos encuentro mi hogar.</p></div>
+      <div class="reason-card">💖<h3>Tu Forma de Ser</h3><p>Amo cada detalle de tu personalidad. Tu bondad, tu inteligencia y tu forma de amar.</p></div>
+      <div class="reason-card">🌟<h3>Nuestros Momentos</h3><p>Cada segundo a tu lado es un regalo. Desde las risas hasta los silencios.</p></div>
+      <div class="reason-card">🌈<h3>Nuestro Futuro</h3><p>Soñar contigo es lo que más me emociona. Quiero compartir mi vida entera a tu lado.</p></div>
+    </div>
+  </section>
+
+  <!-- Reemplaza song.mp3 con tu canción -->
+  <audio id="song" src="song.mp3"></audio>
+
+
+  <script>
+    const audio = document.getElementById('song');
+    const playBtn = document.getElementById('playBtn');
+    const waves = document.querySelectorAll('.waveform span');
+    const progress = document.getElementById('progress');
+    const durationEl = document.getElementById('duration');
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playBtn.textContent = '⏸';
+        waves.forEach(w => w.style.animationPlayState = 'running');
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶';
+        waves.forEach(w => w.style.animationPlayState = 'paused');
+      }
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      const min = Math.floor(audio.duration / 60);
+      const sec = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+      durationEl.textContent = `${min}:${sec}`;
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      progress.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+    });
+  </script>
+  <!-- SECCIÓN 4: GALERÍA DE MOMENTOS -->
+  <section class="gallery-section" id="galeria">
+    <div class="gallery-header">
+      <span class="gallery-badge">📸 Nuestros Momentos</span>
+      <h2>Cada Foto Cuenta<br>Nuestra Historia</h2>
+      <p>Momentos capturados que guardan la esencia de nuestro amor</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-card">
+        <img src="img1.jpg" alt="Nuestro primer encuentro">
+        <div class="gallery-info">
+          <span>Enero 2024 - 6 Abril</span>
+          <h3>Nuestro Salida al Zoo</h3>
+          <p>Un dia muy hermoso</p>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="img2.jpg" alt="Risas compartidas">
+        <div class="gallery-info">
+          <span>Febrero 2024 - 30 Junio</span>
+          <h3>Peli sin pagar</h3>
+          <p>El dia que entramos al cine sin pagar</p>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="img3.jpg" alt="Bajo las estrellas">
+        <div class="gallery-info">
+          <span>Marzo 2024 - 22 Septiembre</span>
+          <h3>Mi amor en la pared</h3>
+          <p>El dia que bandalice una pared por amor</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
